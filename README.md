@@ -7,3 +7,6 @@
 ### Workflow
 - Res1: Linn, Res2: Alda, Res3: Mohammed
 - We are using branches when working
+
+### Contact
+- Teams
