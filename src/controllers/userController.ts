@@ -1,5 +1,5 @@
 import type { Request, Response } from 'express';
-import User from '../models/User';
+import User from '../models/Users';
 
 export const fetchAllUsers = async (req: Request, res: Response) => {
     const search = req.query.search as string;
@@ -27,7 +27,7 @@ export const fetchAllUsers = async (req: Request, res: Response) => {
 
         const users = await User.find(filter)
             .sort(sortOrder)
-            .select('-password');
+            .select('-password'); //vrf .select('-password')
         res.json(users);
     } catch (error: unknown) {
         const message =

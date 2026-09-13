@@ -85,8 +85,12 @@ app.use('/api/greetings', greetingRouter)
 
 
 // Connect To DB
-// import mongoose from 'mongoose';
-// mongoose.connect(process.env.MONGODB_URL || "");
+import mongoose from 'mongoose';
+console.log('2. Connecting to MongoDB...');
+mongoose
+    .connect(process.env.MONGODB_URL || '')
+    .then(() => console.log('3. Connected to MongoDB!'))
+    .catch((err) => console.error('3. MongoDB connection ERROR:', err));
 
 // Start the express server
 const PORT = 3000
