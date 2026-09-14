@@ -3,6 +3,16 @@
 // If the response is successful, display the data.message in #greeting
 const usersElement = document.getElementById('users');
 
+document.getElementById('users-toggle').addEventListener('click', function () {
+    const usersDiv = document.getElementById('users');
+    const arrow = document.getElementById('users-arrow');
+
+    const isHidden = usersDiv.style.display === 'none';
+
+    usersDiv.style.display = isHidden ? 'block' : 'none';
+    arrow.textContent = isHidden ? '▼' : '▶';
+});
+
 async function fetchGreeting() {
     try {
         const response = await fetch(API_URL + "/greetings/admin", {
