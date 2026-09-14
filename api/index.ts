@@ -3,7 +3,7 @@ import express from 'express';
 import cors from 'cors'
 import cookieParser from 'cookie-parser';
 import path from 'path';
-
+import mongoose from 'mongoose';
 
 const app = express();
 
@@ -33,8 +33,8 @@ app.use(cookieParser());
 // With CLIENT_URL empty, no CORS headers are sent at all and only our own
 // same-origin client can use the API from a browser.
 app.use(cors({
-  origin: process.env.CLIENT_URL || 'http://localhost:3000', // This makes the Express server accept requests from other domains
-  credentials: true    // Allows cookies sent to this API
+  origin: process.env.CLIENT_URL || 'http://localhost:3000',
+  credentials: true
 }));
 
 // Serve the static client (the HTML/CSS/JS in public/).
@@ -77,20 +77,21 @@ app.use(express.static(path.join(process.cwd(), 'public')));
 // Routes
 import authRouter from '../src/routes/auth'
 import greetingRouter from '../src/routes/greetings'
+import bookRoutes from '../src/routes/bookRoutes'
+
 app.use('/api/auth', authRouter)
 app.use('/api/greetings', greetingRouter)
-
+app.use('/api/books', bookRoutes)
 
 
 // Connect To DB
-// import mongoose from 'mongoose';
-// mongoose.connect(process.env.MONGODB_URL || "");
+mongoose.connect(process.env.MONGODB_URL || "")
+  .then(() => console.log("Ansluten till MongoDB"))
+  .catch((err) => console.error("Kunde inte ansluta till MongoDB:", err));
+
 
 // Start the express server
 const PORT = 3000
 app.listen(PORT, () => {
   console.log(`Server is running at http://localhost:${PORT}`)
 })
-
-
-
