@@ -15,7 +15,7 @@ document.getElementById('users-toggle').addEventListener('click', function () {
 
 async function fetchGreeting() {
     try {
-        const response = await fetch(API_URL + "/greetings/admin", {
+        const response = await fetch(API_URL + "/greetings", {
             method: "GET",
             headers: {
                 "Content-Type": "application/json"
