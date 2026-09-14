@@ -1,0 +1,1 @@
+{"root":["../src/controllers/authcontroller.ts","../src/controllers/greetingcontroller.ts","../src/controllers/reviewcontroller.ts","../src/middleware/verifytoken.ts","../src/models/review.ts","../src/routes/auth.ts","../src/routes/greetings.ts","../src/routes/reviewroutes.ts","../api/index.ts"],"version":"5.9.3"}
