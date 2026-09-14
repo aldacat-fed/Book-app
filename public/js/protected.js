@@ -1,6 +1,7 @@
 // 1. FETCH GET to API_URL + "/greetings/admin" with credentials: "include". 
 // Use async/await and try/catch to handle the response and any errors that may occur. 
 // If the response is successful, display the data.message in #greeting
+const usersElement = document.getElementById('users');
 
 async function fetchGreeting() {
     try {
@@ -14,6 +15,7 @@ async function fetchGreeting() {
 
         if  (response.status === 401 || response.status === 403) {
             window.location.href = "index.html?message=You must be logged in to view this page";
+            return;
         }
 
         const data = await response.json();
@@ -27,8 +29,75 @@ async function fetchGreeting() {
         console.error("Error:", error);
     }
 }
-fetchGreeting();
 
+
+// fetch user
+const fetchUsers = async () => {
+    try {
+        const response = await fetch(API_URL + '/users', {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+        });
+
+        if (response.status === 401 || response.status === 403) {
+            window.location.href =
+                'index.html?message=You must be logged in to view this page';
+            return;
+        }
+
+        const users = await response.json();
+        renderUsers(users);
+    } catch (error) {
+        usersElement.innerHTML =
+            'Oops something went wrong. Please try again later!';
+        console.log(error);
+    }
+};
+
+function renderUsers(users) {
+    usersElement.innerHTML = users
+        .map(
+            (user) => `
+    <div class="d-flex justify-content-between align-items-center border-bottom py-2">
+      <p class="mb-0">
+        ${user.username}
+        ${user.is_admin ? '<span class="badge bg-primary ms-2">Admin</span>' : ''}
+      </p>
+      <small class="text-muted">Joined: ${formatDate(user.created_at)}</small>
+      <button type="button" class="btn btn-outline-danger btn-sm" onclick="deleteUser('${user._id}')">Delete</button>
+    </div>`,
+        )
+        .join('');
+}
+
+function formatDate(dateString) {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('sv-SE', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+    });
+}
+
+const deleteUser = async (id) => {
+    try {
+        await fetch(API_URL + `/users/${id}`, {
+            method: 'DELETE',
+            credentials: 'include',
+        });
+        fetchUsers();
+    } catch (error) {
+        usersElement.innerHTML =
+            'Oops something went wrong. Please try again later!';
+        console.log(error);
+    }
+};
+
+(async function () {
+    await fetchGreeting();
+    await fetchUsers();
+})();
 
 // 2. Create an addEventlistener for the logout button on click. The buttons ID is "#logout-btn"
 document.getElementById("logout-btn").addEventListener("click", function(event) {
