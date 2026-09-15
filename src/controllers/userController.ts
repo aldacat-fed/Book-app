@@ -7,7 +7,7 @@ export const fetchAllUsers = async (req: Request, res: Response) => {
 
     try {
         function escapeRegex(str: string) {
-            return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); //hantera specialtecken så ej oväntade matchningar
+            return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // handle special characters so we don't get unexpected matches
         }
 
         let filter: {} = {};
@@ -27,7 +27,7 @@ export const fetchAllUsers = async (req: Request, res: Response) => {
 
         const users = await User.find(filter)
             .sort(sortOrder)
-            .select('-password'); //vrf .select('-password')
+            .select('-password'); // why .select('-password')? so the password hash is never sent to the client
         res.json(users);
     } catch (error: unknown) {
         const message =

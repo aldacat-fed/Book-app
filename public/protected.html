@@ -8,49 +8,63 @@
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <div class="container">
-    <div class="d-flex justify-content-between align-items-center mt-4">
-      <h1>Admin panel</h1>
-      <button id="logout-btn" class="btn btn-outline-danger">Logout</button>
-    </div>
-    <p id="greeting"></p>
+<header class="site-header">
+<a href="book-list.html" class="site-logo">The Reading <span>Room</span></a>
+<nav>
+<ul class="site-nav">
+<li><a href="book-list.html">Books</a></li>
+<li><a href="protected.html" class="active">Admin</a></li>
+<li><a href="index.html">Login</a></li>
+</ul>
+</nav>
+</header>
 
-    <h2 class="mt-4">All Users</h2>
-    <div id="users"></div>
+<div class="container">
+<div class="d-flex justify-content-between align-items-center mt-4">
+<h1>Admin panel</h1>
+<button id="logout-btn" class="btn btn-outline-danger">Logout</button>
+</div>
+<p id="greeting"></p>
 
-<!-- ====== HÄR BÖRJAR ANSVARSOMRÅDE 2 (böcker admin) ====== -->
+<h2 class="mt-4">All Users</h2>
+<div id="users"></div>
+
+<!-- ====== AREA OF RESPONSIBILITY 2 STARTS HERE (books admin) ====== -->
 <section id="admin-books-section">
-  <h2>Böcker (admin)</h2>
+<h2>Books (admin)</h2>
+<a href="book-list.html" class="btn">View book list</a>
 
-  <table id="admin-books-table" border="1" cellpadding="6">
-    <thead>
-      <tr>
-        <th>Titel</th>
-        <th>Författare</th>
-        <th>Genres</th>
-        <th>Skapad</th>
-        <th>Publiceringsår</th>
-      </tr>
-    </thead>
-    <tbody id="admin-books-tbody">
-      <!-- Rader fylls i via JS -->
-    </tbody>
-  </table>
+<div class="table-wrapper">
+<table id="admin-books-table" border="1" cellpadding="6">
+<thead>
+<tr>
+<th>Title</th>
+<th>Author</th>
+<th>Genres</th>
+<th>Created</th>
+<th>Published year</th>
+</tr>
+</thead>
+<tbody id="admin-books-tbody">
+<!-- Rows are filled in via JS -->
+</tbody>
+</table>
+</div>
 
-  <h3>Skapa ny bok</h3>
-  <form id="create-book-form">
-    <label>Titel <input type="text" id="book-title" required /></label><br />
-    <label>Beskrivning <textarea id="book-description" required></textarea></label><br />
-    <label>Författare <input type="text" id="book-author" required /></label><br />
-    <label>Genres (kommaseparerat) <input type="text" id="book-genres" placeholder="Fantasy, Äventyr" required /></label><br />
-    <label>Bild-URL <input type="text" id="book-image" required /></label><br />
-    <label>Publiceringsår <input type="number" id="book-year" required /></label><br />
-    <button type="submit">Skapa bok</button>
-  </form>
+<h3>Create new book</h3>
+<form id="create-book-form">
+<label>Title <input type="text" id="book-title" required /></label><br />
+<label>Description <textarea id="book-description" required></textarea></label><br />
+<label>Author <input type="text" id="book-author" required /></label><br />
+<label>Genres (comma-separated) <input type="text" id="book-genres" placeholder="Fantasy, Adventure" required /></label><br />
+<label>Image URL <input type="text" id="book-image" required /></label><br />
+<label>Published year <input type="number" id="book-year" required /></label><br />
+<button type="submit">Create book</button>
+</form>
 
-  <p id="admin-books-message"></p>
+<p id="admin-books-message"></p>
 </section>
-<!-- ====== HÄR SLUTAR ANSVARSOMRÅDE 2 ====== -->
+<!-- ====== AREA OF RESPONSIBILITY 2 ENDS HERE ====== -->
 
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>

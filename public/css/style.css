@@ -1,34 +1,94 @@
-/* ===========================================================
-   TYPSNITT
-   Fraunces = karaktärsfull serif för rubriker (bokkänsla)
-   Inter = ren sans-serif för brödtext och formulär
-=========================================================== */
-@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600;700&display=swap');
 
 :root {
+  /* --- core palette --- */
   --color-bg: #fbf8f2;
+  --color-bg-alt: #f3eee4;
   --color-ink: #241f1c;
   --color-muted: #8a8478;
   --color-accent: #7b3f3f;
   --color-accent-dark: #5c2e2e;
+  --color-accent-soft: #efe1d9;
+  --color-forest: #3b4a3a;
   --color-border: #d8d0c0;
   --color-card-bg: #ffffff;
 
+  /* --- typography --- */
   --font-display: 'Fraunces', Georgia, serif;
   --font-body: 'Inter', system-ui, sans-serif;
+
+  /* --- elevation: warm-toned shadows instead of flat black --- */
+  --shadow-sm: 0 1px 2px rgba(75, 51, 38, 0.08);
+  --shadow-md: 0 6px 16px -4px rgba(75, 51, 38, 0.18), 0 2px 6px rgba(75, 51, 38, 0.08);
+  --shadow-lg: 0 20px 40px -12px rgba(75, 51, 38, 0.28);
+
+  /* --- rhythm --- */
+  --radius-sm: 2px;
+  --header-height: 64px;
 }
 
-* {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 
 body {
   margin: 0;
-  padding: 2rem;
-  background: var(--color-bg);
+  padding: 0;
+  background-color: var(--color-bg);
+  /* Subtle paper-grain texture via layered SVG noise — quiet, not decorative for its own sake */
+  background-image:
+    radial-gradient(circle at 1px 1px, rgba(36, 31, 28, 0.035) 1px, transparent 0);
+  background-size: 22px 22px;
   color: var(--color-ink);
   font-family: var(--font-body);
-  line-height: 1.5;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--color-accent);
+  color: #fff;
+}
+
+/* Custom scrollbar (WebKit) — quiet, matches the palette instead of default grey */
+::-webkit-scrollbar {
+  width: 12px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-bg-alt);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 6px;
+  border: 3px solid var(--color-bg-alt);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-accent);
+}
+
+.page-content {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2.5rem 2rem 4rem;
 }
 
 h1, h2, h3 {
@@ -36,18 +96,31 @@ h1, h2, h3 {
   font-weight: 600;
   margin: 0 0 1rem 0;
   color: var(--color-ink);
+  letter-spacing: -0.01em;
 }
 
 h1 {
-  font-size: 2.25rem;
-  border-bottom: 2px solid var(--color-accent);
-  padding-bottom: 0.5rem;
+  font-size: clamp(2rem, 1.6rem + 1.6vw, 2.75rem);
+  line-height: 1.1;
+  position: relative;
   display: inline-block;
+  padding-bottom: 0.6rem;
+}
+
+/* Hand-drawn-feeling underline instead of a plain border, via a gradient sliver */
+h1::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, var(--color-accent) 0%, var(--color-accent) 60%, transparent 100%);
 }
 
 h2 {
   font-size: 1.5rem;
-  margin-top: 2.5rem;
+  margin-top: 2.75rem;
 }
 
 h3 {
@@ -58,100 +131,269 @@ a {
   color: var(--color-accent);
 }
 
+p {
+  color: var(--color-ink);
+}
+
 /* ===========================================================
-   BOKLISTA (besökare) — public/book-list.html
+   SITE HEADER — sticky nav used across all pages
+=========================================================== */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  height: var(--header-height);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2rem;
+  background: rgba(251, 248, 242, 0.88);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.site-logo {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 600;
+  font-size: 1.3rem;
+  color: var(--color-ink);
+  text-decoration: none;
+  letter-spacing: -0.01em;
+}
+
+.site-logo span {
+  color: var(--color-accent);
+}
+
+.site-nav {
+  display: flex;
+  gap: 1.75rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.site-nav a {
+  position: relative;
+  color: var(--color-ink);
+  text-decoration: none;
+  font-size: 0.92rem;
+  font-weight: 500;
+  padding: 0.3rem 0;
+}
+
+.site-nav a::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 0%;
+  height: 2px;
+  background: var(--color-accent);
+  transition: width 0.2s ease;
+}
+
+.site-nav a:hover::after,
+.site-nav a.active::after {
+  width: 100%;
+}
+
+.site-nav a.active {
+  color: var(--color-accent-dark);
+}
+
+/* ===========================================================
+   ENTRANCE ANIMATION — one orchestrated reveal on load, not
+   per-section confetti. Respects prefers-reduced-motion above.
+=========================================================== */
+@keyframes settle-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.page-content > * {
+  animation: settle-in 0.5s ease both;
+}
+
+.page-content > *:nth-child(2) { animation-delay: 0.05s; }
+.page-content > *:nth-child(3) { animation-delay: 0.1s; }
+.page-content > *:nth-child(4) { animation-delay: 0.15s; }
+
+/* ===========================================================
+   BOOK GRID (visitors) — public/book-list.html
 =========================================================== */
 .book-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 1.5rem;
-  margin-top: 1.5rem;
-  max-width: 1100px;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
 }
 
 .book-card {
+  position: relative;
   display: block;
   background: var(--color-card-bg);
   border: 1px solid var(--color-border);
-  border-top: 4px solid var(--color-accent);
-  padding: 1rem;
+  padding: 1.1rem 1.1rem 1.3rem;
   text-decoration: none;
   color: var(--color-ink);
-  transition: border-color 0.15s ease;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.22s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.22s ease, border-color 0.22s ease;
+  animation: settle-in 0.5s ease both;
+}
+
+.book-grid .book-card:nth-child(1) { animation-delay: 0.02s; }
+.book-grid .book-card:nth-child(2) { animation-delay: 0.06s; }
+.book-grid .book-card:nth-child(3) { animation-delay: 0.10s; }
+.book-grid .book-card:nth-child(4) { animation-delay: 0.14s; }
+.book-grid .book-card:nth-child(5) { animation-delay: 0.18s; }
+.book-grid .book-card:nth-child(n+6) { animation-delay: 0.2s; }
+
+/* "book spine" accent — a colored bar that thickens on hover, like pulling
+   a book slightly off the shelf toward you */
+.book-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: var(--color-accent);
+  transition: height 0.22s ease;
 }
 
 .book-card:hover {
-  border-top-color: var(--color-accent-dark);
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--color-accent);
+}
+
+.book-card:hover::before {
+  height: 6px;
 }
 
 .book-card img {
   width: 100%;
-  height: 160px;
+  height: 190px;
   object-fit: cover;
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.9rem;
   border: 1px solid var(--color-border);
+  filter: saturate(0.92);
+  transition: filter 0.3s ease, transform 0.3s ease;
+}
+
+.book-card:hover img {
+  filter: saturate(1.05);
+  transform: scale(1.015);
 }
 
 .book-card h3 {
-  font-size: 1.1rem;
-  margin-bottom: 0.4rem;
+  font-size: 1.15rem;
+  margin-bottom: 0.5rem;
+  line-height: 1.25;
 }
 
 .book-card p {
-  margin: 0.2rem 0;
+  margin: 0.25rem 0;
   font-size: 0.85rem;
   color: var(--color-muted);
 }
 
 .book-card p strong {
   color: var(--color-ink);
+  font-weight: 600;
 }
 
 /* ===========================================================
-   ADMINPANEL — public/protected.html (books-sektionen)
+   ADMIN PANEL — public/protected.html (books section)
 =========================================================== */
 #admin-books-section {
-  max-width: 800px;
+  max-width: 900px;
+}
+
+#admin-books-section > .btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 1.5rem;
+  text-decoration: none;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-sm);
 }
 
 #admin-books-table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 1rem;
   font-size: 0.9rem;
 }
 
 #admin-books-table th,
 #admin-books-table td {
   text-align: left;
-  padding: 0.6rem 0.8rem;
+  padding: 0.75rem 1rem;
   border-bottom: 1px solid var(--color-border);
 }
 
-#admin-books-table th {
+#admin-books-table thead th {
   font-family: var(--font-display);
   font-weight: 600;
+  font-size: 0.95rem;
   color: var(--color-accent-dark);
+  background: var(--color-bg-alt);
   border-bottom: 2px solid var(--color-accent);
 }
 
+#admin-books-table tbody tr {
+  position: relative;
+  transition: background 0.15s ease;
+}
+
 #admin-books-table tbody tr:hover {
-  background: #f3eee4;
+  background: var(--color-bg-alt);
+}
+
+#admin-books-table tbody tr:hover td:first-child {
+  box-shadow: inset 3px 0 0 var(--color-accent);
+}
+
+#admin-books-section h3 {
+  margin-top: 2.5rem;
 }
 
 /* ===========================================================
-   FORMULÄR (skapa bok, login, register)
+   FORMS (create book, review, login, register)
 =========================================================== */
+.form-card {
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-sm);
+  padding: 1.75rem;
+  max-width: 460px;
+  margin-top: 1rem;
+}
+
 form {
-  max-width: 420px;
+  max-width: 460px;
   margin-top: 1rem;
 }
 
 form label {
   display: block;
-  margin-bottom: 1rem;
+  margin-bottom: 1.15rem;
   font-weight: 500;
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   color: var(--color-ink);
 }
 
@@ -159,24 +401,31 @@ form input,
 form textarea {
   display: block;
   width: 100%;
-  margin-top: 0.35rem;
-  padding: 0.55rem 0.7rem;
+  margin-top: 0.4rem;
+  padding: 0.65rem 0.8rem;
   font-family: var(--font-body);
   font-size: 0.95rem;
   border: 1px solid var(--color-border);
-  border-radius: 2px;
+  border-radius: var(--radius-sm);
   background: var(--color-card-bg);
   color: var(--color-ink);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+form input:hover,
+form textarea:hover {
+  border-color: #c2b8a3;
 }
 
 form input:focus,
 form textarea:focus {
   outline: none;
   border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(123, 63, 63, 0.14);
 }
 
 form textarea {
-  min-height: 90px;
+  min-height: 100px;
   resize: vertical;
 }
 
@@ -185,25 +434,36 @@ button,
   font-family: var(--font-body);
   font-weight: 600;
   font-size: 0.9rem;
-  padding: 0.6rem 1.4rem;
-  border-radius: 2px;
+  padding: 0.7rem 1.5rem;
+  border-radius: var(--radius-sm);
   border: 1px solid var(--color-accent);
   background: var(--color-accent);
   color: #fff;
   cursor: pointer;
-  transition: background 0.15s ease;
+  box-shadow: var(--shadow-sm);
+  transition: background 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
 }
 
 button:hover,
 .btn:hover {
   background: var(--color-accent-dark);
   border-color: var(--color-accent-dark);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
 }
 
+button:active,
+.btn:active {
+  transform: translateY(0);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Overrides Bootstrap's red "outline-danger" button (logout) to match our theme */
 .btn-outline-danger {
   background: transparent;
   color: var(--color-accent);
   border: 1px solid var(--color-accent);
+  box-shadow: none;
 }
 
 .btn-outline-danger:hover {
@@ -211,26 +471,253 @@ button:hover,
   color: #fff;
 }
 
-#admin-books-message {
-  margin-top: 0.75rem;
+#admin-books-message,
+#review-message {
+  margin-top: 0.85rem;
   font-size: 0.9rem;
+  font-weight: 500;
   color: var(--color-accent-dark);
 }
 
 /* ===========================================================
-   RESPONSIVITET
+   BACK LINK — book.html
 =========================================================== */
-@media (max-width: 480px) {
-  body {
-    padding: 1.25rem;
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-bottom: 1.75rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-decoration: none;
+  color: var(--color-accent);
+  transition: gap 0.15s ease, color 0.15s ease;
+}
+
+.back-link:hover {
+  gap: 0.55rem;
+  color: var(--color-accent-dark);
+}
+
+/* ===========================================================
+   BOOK DETAIL PAGE — public/book.html
+=========================================================== */
+#book-detail {
+  display: grid;
+  grid-template-columns: minmax(220px, 320px) 1fr;
+  gap: 2.5rem;
+  align-items: start;
+  max-width: 900px;
+}
+
+.book-detail-image {
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-lg);
+  display: block;
+}
+
+.book-detail-meta {
+  margin: 0.3rem 0;
+  font-size: 0.95rem;
+  color: var(--color-muted);
+}
+
+.book-detail-meta strong {
+  color: var(--color-ink);
+  font-weight: 600;
+}
+
+.book-detail-description {
+  margin-top: 1.4rem;
+  max-width: 60ch;
+  line-height: 1.7;
+  font-size: 1.02rem;
+}
+
+/* Decorative opening quote mark on the first paragraph of the description,
+   a small editorial flourish tied to the "book" subject matter */
+.book-detail-description::first-letter {
+  font-family: var(--font-display);
+  font-size: 2.6em;
+  font-weight: 600;
+  float: left;
+  line-height: 0.85;
+  margin: 0.05em 0.08em 0 0;
+  color: var(--color-accent);
+}
+
+@media (max-width: 700px) {
+  #book-detail {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ===========================================================
+   REVIEWS — book.html
+=========================================================== */
+#review-section {
+  max-width: 900px;
+  margin-top: 3.5rem;
+  border-top: 1px solid var(--color-border);
+  padding-top: 2.25rem;
+}
+
+.review-card {
+  position: relative;
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-border);
+  padding: 1rem 1.2rem 1rem 1.5rem;
+  margin-bottom: 1rem;
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.review-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateX(2px);
+}
+
+.review-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 3px;
+  height: 100%;
+  background: var(--color-accent);
+}
+
+.review-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  gap: 1rem;
+}
+
+.review-header strong {
+  font-family: var(--font-display);
+  font-size: 1.02rem;
+}
+
+.review-rating {
+  color: var(--color-accent);
+  letter-spacing: 2px;
+  font-size: 0.95rem;
+}
+
+.review-date {
+  margin: 0.5rem 0 0 0;
+  font-size: 0.78rem;
+  color: var(--color-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* ===========================================================
+   LOGIN / REGISTER — public/index.html
+=========================================================== */
+#login-form,
+#register-form {
+  max-width: 400px;
+}
+
+.alert {
+  max-width: 440px;
+  padding: 0.8rem 1.1rem;
+  margin-top: 1rem;
+  border: 1px solid var(--color-border);
+  border-left: 3px solid var(--color-border);
+  font-size: 0.9rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.alert-danger {
+  background: #f6e9e5;
+  border-left-color: var(--color-accent);
+  color: var(--color-accent-dark);
+}
+
+.alert-success {
+  background: #eef1e6;
+  border-left-color: var(--color-forest);
+  color: #35472f;
+}
+
+.alert a {
+  font-weight: 600;
+}
+
+/* ===========================================================
+   USER LIST (admin) — protected.html, #users
+=========================================================== */
+#users table,
+table {
+  width: 100%;
+  max-width: 900px;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  box-shadow: var(--shadow-sm);
+}
+
+#users th,
+#users td,
+table th,
+table td {
+  text-align: left;
+  padding: 0.7rem 0.9rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+#users th,
+table th {
+  font-family: var(--font-display);
+  font-weight: 600;
+  color: var(--color-accent-dark);
+  background: var(--color-bg-alt);
+  border-bottom: 2px solid var(--color-accent);
+}
+
+#users tbody tr:hover,
+table tbody tr:hover {
+  background: var(--color-bg-alt);
+}
+
+/* ===========================================================
+   RESPONSIVE
+=========================================================== */
+@media (max-width: 640px) {
+  .site-header {
+    padding: 0 1.25rem;
+  }
+
+  .site-nav {
+    gap: 1.1rem;
+  }
+
+  .page-content {
+    padding: 1.75rem 1.25rem 3rem;
   }
 
   h1 {
-    font-size: 1.75rem;
+    font-size: 1.8rem;
   }
 
   .book-grid {
     grid-template-columns: 1fr 1fr;
-    gap: 1rem;
+    gap: 1.1rem;
+  }
+}
+
+@media (max-width: 420px) {
+  .site-nav a:not(.site-nav a:first-child):not(.site-nav a:last-child) {
+    display: none;
+  }
+
+  .book-grid {
+    grid-template-columns: 1fr;
   }
 }
