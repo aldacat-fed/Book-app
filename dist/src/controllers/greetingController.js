@@ -12,6 +12,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.greetingSpecific = void 0;
 const greetingSpecific = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const name = req.params.name;
-    res.json({ message: `Hello ${name}, welcome to your admin panel!` });
+    res.json({ message: `Hello ${name}, welcome!` });
 });
 exports.greetingSpecific = greetingSpecific;

@@ -15,17 +15,25 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.logout = exports.register = exports.login = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
+const users_1 = __importDefault(require("../models/users"));
 const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { username, password } = req.body;
     if (username === undefined || password === undefined) {
         res.status(400).json({ message: 'username and password are required' });
         return;
     }
-    const hashedPassword = "$2b$10$WoiGUJIU1IB5VarJOe468eae0wHxD53MI9PJta2ohnBam2R72Kc2S";
-    const isLoggedIn = yield bcrypt_1.default.compare(password, hashedPassword);
-    if (username === 'admin' && password === '123') {
-        const accessToken = jsonwebtoken_1.default.sign({ username }, process.env.JWT_SECRET || "", { expiresIn: '7d' });
-        console.log(accessToken);
+    try {
+        const user = yield users_1.default.findOne({ username }).select('+password');
+        if (!user) {
+            res.status(401).json({ message: 'username/password are wrong' });
+            return;
+        }
+        const isLoggedIn = yield bcrypt_1.default.compare(password, user.password);
+        if (!isLoggedIn) {
+            res.status(401).json({ message: 'username/password are wrong' });
+            return;
+        }
+        const accessToken = jsonwebtoken_1.default.sign({ id: user._id, username: user.username, is_admin: user.is_admin }, process.env.JWT_SECRET || "", { expiresIn: '7d' });
         res.cookie('accessToken', accessToken, {
             // Prevents client-side JavaScript from accessing the cookie (e.g. document.cookie).
             // This protects against XSS attacks where malicious scripts try to steal the token.
@@ -44,9 +52,9 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         res.json({ message: 'You are logged in', isLoggedIn: isLoggedIn });
         return;
     }
-    else {
-        res.status(401).json({ message: 'username/password are wrong' });
-        return;
+    catch (error) {
+        const message = error instanceof Error ? error.message : 'Unknown error';
+        res.status(500).json({ error: message });
     }
 });
 exports.login = login;
@@ -57,12 +65,24 @@ const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         return;
     }
     try {
+        const existingUser = yield users_1.default.findOne({ username });
+        if (existingUser) {
+            res.status(409).json({ message: 'username already exists' });
+            return;
+        }
         const hashedPassword = yield bcrypt_1.default.hash(password, 10);
-        // The hashedPassword is the value that should be saved in the DB, not the plain password. For security reasons
-        res.json({ message: "You are registered", username: username, password: password, hashedPassword: hashedPassword });
+        const newUser = yield users_1.default.create({
+            username: username,
+            password: hashedPassword,
+        });
+        res.status(201).json({
+            message: 'You are registered',
+            user: { id: newUser._id, username: newUser.username },
+        });
     }
-    catch (e) {
-        console.log(e);
+    catch (error) {
+        const message = error instanceof Error ? error.message : 'Unknown error';
+        res.status(500).json({ error: message });
     }
 });
 exports.register = register;

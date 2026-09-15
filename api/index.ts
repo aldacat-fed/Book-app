@@ -80,10 +80,12 @@ import greetingRouter from '../src/routes/greetings'
 import userRouter from '../src/routes/users'
 app.use('/api/users', userRouter)
 import bookRoutes from '../src/routes/bookRoutes'
+import reviewRouter from '../src/routes/reviewRoutes'
 
 app.use('/api/auth', authRouter)
 app.use('/api/greetings', greetingRouter)
 app.use('/api/books', bookRoutes)
+app.use('/api/reviews', reviewRouter)
 
 
 // Connect To DB
