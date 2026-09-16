@@ -8,6 +8,7 @@ const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const path_1 = __importDefault(require("path"));
+const mongoose_1 = __importDefault(require("mongoose"));
 const app = (0, express_1.default)();
 // in the .env file can the following variables be included
 // JWT_SECRET = 'secret'
@@ -30,8 +31,8 @@ app.use((0, cookie_parser_1.default)());
 // With CLIENT_URL empty, no CORS headers are sent at all and only our own
 // same-origin client can use the API from a browser.
 app.use((0, cors_1.default)({
-    origin: process.env.CLIENT_URL || 'http://localhost:3000', // This makes the Express server accept requests from other domains
-    credentials: true // Allows cookies sent to this API
+    origin: process.env.CLIENT_URL || 'http://localhost:3000',
+    credentials: true
 }));
 // Serve the static client (the HTML/CSS/JS in public/).
 // Read the line from the inside out:
@@ -71,11 +72,18 @@ app.use(express_1.default.static(path_1.default.join(process.cwd(), 'public')));
 // Routes
 const auth_1 = __importDefault(require("../src/routes/auth"));
 const greetings_1 = __importDefault(require("../src/routes/greetings"));
+const users_1 = __importDefault(require("../src/routes/users"));
+app.use('/api/users', users_1.default);
+const bookRoutes_1 = __importDefault(require("../src/routes/bookRoutes"));
+const reviewRoutes_1 = __importDefault(require("../src/routes/reviewRoutes"));
 app.use('/api/auth', auth_1.default);
 app.use('/api/greetings', greetings_1.default);
+app.use('/api/books', bookRoutes_1.default);
+app.use('/api/reviews', reviewRoutes_1.default);
 // Connect To DB
-// import mongoose from 'mongoose';
-// mongoose.connect(process.env.MONGODB_URL || "");
+mongoose_1.default.connect(process.env.MONGODB_URL || "")
+    .then(() => console.log("Ansluten till MongoDB"))
+    .catch((err) => console.error("Kunde inte ansluta till MongoDB:", err));
 // Start the express server
 const PORT = 3000;
 app.listen(PORT, () => {
