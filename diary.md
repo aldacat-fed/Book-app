@@ -1,6 +1,27 @@
 # Diary – Group Project: Book API
 
 ## Ansvarsområde 1 - Linn
+### Week 1 – Getting started
+Started in VS Code: created the Model, Routes, and Controller for the User entity, along with token handling. Model: defined with types and descriptions. Routes: API endpoints protected by a JWT stored in an httpOnly cookie, verified before the request proceeds to the controller. Controller: implemented full CRUD operations for users.
+
+Replaced the hardcoded login with a database-backed user. In the authController, added a register function that uses User.create to store new users in MongoDB, and User.findOne to retrieve a specific user for login. During login, the provided password is compared against the stored hashed password. The API never returns the password field in responses. As a result, users can register and log in securely. On successful login, a JSON Web Token (JWT) is signed containing the user's id, username, and is_admin status, with a validity period of 7 days.
+
+Everything was tested via Insomnia and verified directly in MongoDB.
+
+Everything was tested via Insomnia and checked in MongoDB. Started building client.
+
+Ran in some issues with route-imports.
+
+### Week 1-2- Testning and Client page
+Continued building client and connected to server. Created two forms for login and registration. The forms toggle dynamically using JavaScript, with validation messages shown when a field is filled in incorrectly. Reviewed all code from the previous week and fixed several minor bugs. Continued testing with Insomnia.
+
+Ran in some issues with error-messages not showing in client. Had to restructure html.
+
+### Week 2 - Client page and polish
+Added a personalized greeting shown when a user logs in. The username is dynamic and updates based on the logged-in user, retrieved from the JWT via req.user. On logout, the accessToken cookie is cleared and the user is redirected to the login page. Also refined the layout and features, including the form toggle functionality. Small layout fixes.
+
+Ran in some issues with greeting specific user. Had to save username as req.user in middleware/verifyToken before next() is called.
+
 
 ## Area of Responsibility 2 – Alda 
 ### Week 1 – Getting started
