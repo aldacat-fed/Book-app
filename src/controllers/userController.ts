@@ -1,5 +1,5 @@
 import type { Request, Response } from 'express';
-import User from '../models/Users';
+import User from '../models/users';
 
 export const fetchAllUsers = async (req: Request, res: Response) => {
     const search = req.query.search as string;
