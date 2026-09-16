@@ -9,6 +9,7 @@
 - Daily standup 1: Started the project and installed what was needed to get going.
 - Daily standup 2: Agreed on what to work on next. Everyone works in VS Code. We also discussed how far we'd come and planned to get as much done as possible over the weekend.
 - Daily standup 3: We merged our pull requests together and discussed what's left to do. We had no conflicts while merging, everyone is satisfied and we don't have much left.
+- Daily standup 3: Discussed how we are going to present the project on Friday and merged our work together. We also went through a code conflict and resolved it.
 
 ### Workflow
 - Res1: Linn, Res2: Alda, Res3: Mohammed
