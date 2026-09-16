@@ -1,15 +1,28 @@
 <!DOCTYPE html>
-<html lang="sv">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Böcker</title>
+  <title>Books — The Reading Room</title>
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
-  <h1>Alla böcker</h1>
+  <header class="site-header">
+    <a href="book-list.html" class="site-logo">The Reading <span>Room</span></a>
+    <nav>
+      <ul class="site-nav">
+        <li><a href="book-list.html" class="active">Books</a></li>
+        <li><a href="protected.html">Admin</a></li>
+        <li><a href="index.html">Login</a></li>
+      </ul>
+    </nav>
+  </header>
 
-  <!-- Här renderas boklistan via JavaScript -->
-  <div id="book-list" class="book-grid"></div>
+  <main class="page-content">
+    <h1>All books</h1>
+
+    <!-- Book list is rendered here via JavaScript -->
+    <div id="book-list" class="book-grid"></div>
+  </main>
 
   <script src="js/books.js"></script>
 </body>

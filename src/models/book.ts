@@ -19,15 +19,15 @@ const bookSchema = new Schema<IBook>(
     published_year: { type: Number, required: true },
   },
   {
-    // Ger oss createdAt/updatedAt automatiskt (används i admin-tabellen)
+    // Gives us createdAt/updatedAt automatically (used in the admin table)
     timestamps: true,
-    // Gör att vi kan slå upp tillhörande reviews utan att lagra dem i books-dokumentet
+    // Lets us look up related reviews without storing them in the book document
     toJSON: { virtuals: true },
     toObject: { virtuals: true },
   }
 );
 
-// Virtuellt fält: hämtar alla reviews som pekar på detta book_id (populeras i controllern)
+// Virtual field: fetches all reviews pointing to this book's id (populated in the controller)
 bookSchema.virtual("reviews", {
   ref: "Review",
   localField: "_id",

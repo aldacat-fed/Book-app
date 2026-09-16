@@ -1,10 +1,20 @@
 const BOOKS_API_URL = "http://localhost:3000/api/books";
 
-// OBS: Anta att token sparas i localStorage vid inloggning, av ansvarsområde 1
-// (t.ex. localStorage.setItem("token", data.token) i login-koden).
-// Justera nyckeln nedan om ni sparar token på ett annat sätt.
 function getToken() {
   return localStorage.getItem("token");
+}
+
+let messageTimeout;
+
+// Shows a message in #admin-books-message and clears it again after a while
+function showMessage(text, durationMs = 3000) {
+  const messageEl = document.getElementById("admin-books-message");
+  messageEl.textContent = text;
+
+  clearTimeout(messageTimeout); // in case a new message arrives before the previous one disappeared
+  messageTimeout = setTimeout(() => {
+    messageEl.textContent = "";
+  }, durationMs);
 }
 
 async function loadAdminBooks() {
@@ -18,7 +28,7 @@ async function loadAdminBooks() {
     books.forEach((book) => {
       const row = document.createElement("tr");
       const createdDate = book.createdAt
-        ? new Date(book.createdAt).toLocaleDateString("sv-SE")
+        ? new Date(book.createdAt).toLocaleDateString("en-US")
         : "-";
 
       row.innerHTML = `
@@ -32,13 +42,12 @@ async function loadAdminBooks() {
       tbody.appendChild(row);
     });
   } catch (error) {
-    console.error("Kunde inte hämta böcker för admin-tabellen", error);
+    console.error("Could not fetch books for the admin table", error);
   }
 }
 
 async function createBook(event) {
   event.preventDefault();
-  const messageEl = document.getElementById("admin-books-message");
 
   const newBook = {
     title: document.getElementById("book-title").value,
@@ -65,14 +74,14 @@ async function createBook(event) {
 
     if (!response.ok) {
       const errorData = await response.json();
-      throw new Error(errorData.message || "Kunde inte skapa boken");
+      throw new Error(errorData.message || "Could not create the book");
     }
 
-    messageEl.textContent = "Boken skapades!";
+    showMessage("Book created!");
     document.getElementById("create-book-form").reset();
-    loadAdminBooks(); // uppdatera tabellen
+    loadAdminBooks(); // refresh the table
   } catch (error) {
-    messageEl.textContent = "Fel: " + error.message;
+    showMessage("Error: " + error.message, 4000);
     console.error(error);
   }
 }
@@ -82,3 +91,30 @@ document
   .addEventListener("submit", createBook);
 
 loadAdminBooks();
+
+
+(function autoHideGreeting() {
+  const greetingEl = document.getElementById("greeting");
+  if (!greetingEl) return;
+
+  let hideTimeout;
+
+  function scheduleHide() {
+    if (greetingEl.textContent.trim() === "") return;
+    clearTimeout(hideTimeout);
+    hideTimeout = setTimeout(() => {
+      greetingEl.style.transition = "opacity 0.4s ease";
+      greetingEl.style.opacity = "0";
+      setTimeout(() => {
+        greetingEl.style.display = "none";
+      }, 400);
+    }, 3000);
+  }
+
+  // If the text is already there when the page loads
+  scheduleHide();
+
+  // If protected.js sets the text a bit later (async)
+  const observer = new MutationObserver(scheduleHide);
+  observer.observe(greetingEl, { childList: true, characterData: true, subtree: true });
+})();
