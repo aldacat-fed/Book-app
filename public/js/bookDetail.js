@@ -1,10 +1,27 @@
-const API_URL = "http://localhost:3000/api";
+const IS_DEMO = window.location.hostname.endsWith("github.io");
+const API_URL = "/api";
+const DEMO_URL = "data/books.json";
 
 const params = new URLSearchParams(window.location.search);
 const bookId = params.get("id");
 
 const detailContainer = document.getElementById("book-detail");
 const reviewListContainer = document.getElementById("review-list");
+
+async function fetchBook() {
+  if (IS_DEMO) {
+    const response = await fetch(DEMO_URL);
+    if (!response.ok) throw new Error("Could not fetch demo data");
+    const books = await response.json();
+    const book = books.find((b) => b._id === bookId);
+    if (!book) throw new Error("Book not found");
+    return book;
+  }
+
+  const response = await fetch(`${API_URL}/books/${bookId}`);
+  if (!response.ok) throw new Error("Could not fetch the book");
+  return response.json();
+}
 
 async function loadBook() {
   if (!bookId) {
@@ -13,10 +30,7 @@ async function loadBook() {
   }
 
   try {
-    const response = await fetch(`${API_URL}/books/${bookId}`);
-    if (!response.ok) throw new Error("Could not fetch the book");
-
-    const book = await response.json();
+    const book = await fetchBook();
 
     detailContainer.innerHTML = `
       <img src="${book.image}" alt="${book.title}" class="book-detail-image" />
@@ -81,6 +95,11 @@ function renderReviews(reviews) {
 async function createReview(event) {
   event.preventDefault();
   const messageEl = document.getElementById("review-message");
+
+  if (IS_DEMO) {
+    messageEl.textContent = "Reviews are disabled in the static demo. Run the app locally to try them.";
+    return;
+  }
 
   const newReview = {
     name: document.getElementById("review-name").value,

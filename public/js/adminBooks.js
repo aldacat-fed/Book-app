@@ -1,4 +1,4 @@
-const BOOKS_API_URL = "http://localhost:3000/api/books";
+const BOOKS_API_URL = "/api/books";
 
 function getToken() {
   return localStorage.getItem("token");

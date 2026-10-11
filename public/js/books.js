@@ -1,11 +1,20 @@
-const API_URL = "http://localhost:3000/api/books";
+const IS_DEMO = window.location.hostname.endsWith("github.io");
+const API_URL = "/api/books";
+const DEMO_URL = "data/books.json";
 
 async function loadBooks() {
   const listContainer = document.getElementById("book-list");
   listContainer.innerHTML = "Loading books...";
 
+  if (IS_DEMO) {
+    listContainer.insertAdjacentHTML(
+      "beforebegin",
+      '<p class="demo-notice">Static demo: books are loaded from a JSON file. Login, admin and reviews need the Node/MongoDB backend and only work when the app is run locally.</p>'
+    );
+  }
+
   try {
-    const response = await fetch(API_URL);
+    const response = await fetch(IS_DEMO ? DEMO_URL : API_URL);
     if (!response.ok) throw new Error("Could not fetch books");
 
     const books = await response.json();

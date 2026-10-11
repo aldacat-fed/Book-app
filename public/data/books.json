@@ -1,0 +1,57 @@
+[
+  {
+    "_id": "6aa65d98927a167b74c19685",
+    "title": "The Lord of the Rings",
+    "description": "In the peaceful Shire, a young hobbit named Frodo Baggins inherits a plain gold ring from his uncle Bilbo. When the wizard Gandalf reveals that it is the One Ring, forged by the Dark Lord Sauron to dominate all of Middle-earth, Frodo sets out on a perilous journey to destroy it in the fires of Mount Doom, accompanied by a fellowship of friends who must face armies, betrayal, and their own fears along the way.",
+    "author": "J.R.R. Tolkien",
+    "genres": ["Fantasy", "Adventure"],
+    "image": "https://bilder.akademibokhandeln.se/images_akb/9789172633414_766",
+    "published_year": 1954,
+    "createdAt": "2026-09-13T08:23:52.188Z",
+    "reviews": []
+  },
+  {
+    "_id": "6aa65e94927a167b74c19689",
+    "title": "Harry Potter and the Philosopher's Stone",
+    "description": "Harry Potter has spent his entire life being mistreated by his aunt and uncle, unaware that he is actually a famous wizard. On his eleventh birthday, he is invited to attend Hogwarts School of Witchcraft and Wizardry, where he discovers a hidden magical world, makes his first true friends, and uncovers a dark secret hidden beneath the school that ties back to the wizard who killed his parents.",
+    "author": "J.K. Rowling",
+    "genres": ["Fantasy", "Young Adult"],
+    "image": "https://i-viaplay-com.akamaized.net/viaplay-prod/931/908/1560520147-a8dd4b4dabebb28bf4d271f2aa90a67bf90f7446_SE.jpg?width=400&height=600",
+    "published_year": 1997,
+    "createdAt": "2026-09-13T08:28:04.268Z",
+    "reviews": []
+  },
+  {
+    "_id": "6aa65ef9927a167b74c1968c",
+    "title": "1984",
+    "description": "In a totalitarian superstate ruled by the all-seeing Party and its leader, Big Brother, Winston Smith works at the Ministry of Truth rewriting history to fit the regime's ever-changing narrative. As he begins to secretly rebel against the oppressive surveillance and thought control that dominate every aspect of daily life, he risks everything for a fragment of freedom and truth.",
+    "author": "George Orwell",
+    "genres": ["Dystopian", "Science Fiction"],
+    "image": "https://image.bokus.com/images2/9780141036144_766",
+    "published_year": 1949,
+    "createdAt": "2026-09-13T08:29:45.549Z",
+    "reviews": []
+  },
+  {
+    "_id": "6aa65f95927a167b74c1968f",
+    "title": "Pippi Longstocking",
+    "description": "Pippi Longstocking is the strongest girl in the world, and she lives entirely on her own with a monkey and a horse, answering to no one. With her wild red braids, mismatched stockings, and a suitcase full of gold coins, she turns everyday rules upside down, befriends the neighborhood children, and shows everyone around her that imagination and kindness matter more than following the rules.",
+    "author": "Astrid Lindgren",
+    "genres": ["Children's", "Adventure"],
+    "image": "https://m.media-amazon.com/images/I/71WFTdpi21L._SL1500_.jpg",
+    "published_year": 1945,
+    "createdAt": "2026-09-13T08:32:21.820Z",
+    "reviews": []
+  },
+  {
+    "_id": "6aa65fe6927a167b74c19692",
+    "title": "Mio, My Son",
+    "description": "Lonely and unloved, young Bo is magically transported from Stockholm to the enchanted Land of Faraway, where he discovers he is actually Prince Mio, the long-lost son of the King. But the kingdom lies under threat from the cruel knight Kato, and Mio must journey through dark forests and across dangerous lands to confront him and save his new home.",
+    "author": "Astrid Lindgren",
+    "genres": ["Fantasy", "Children's"],
+    "image": "https://images.rabensjogren.se/00829c37-bd81-49dd-bf0a-60abe9c4eda6",
+    "published_year": 1954,
+    "createdAt": "2026-09-13T08:33:42.934Z",
+    "reviews": []
+  }
+]
