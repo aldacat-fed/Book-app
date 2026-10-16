@@ -15,62 +15,26 @@ const app = express();
 
 // Middleware
 // Reads a request body sent as JSON text and turns it into a real JavaScript
-// object, which Express hands us as req.body. Without this line req.body is
-// undefined - that is what our controllers check for first.
+// object, which Express hands us as req.body.
 app.use(express.json());
 
 // Reads the browser's Cookie header and splits it into req.cookies, so
 // verifyToken can reach the token as req.cookies.accessToken.
 app.use(cookieParser());
 
-
 // CORS only concerns requests from OTHER origins. Our own client lives in
 // public/ and is served from the same origin as this API, so the browser never
-// treats it as cross-origin and never applies any of these rules to it.
-// The two options below are a pair, and only matter for an external client:
-//   origin      -> WHICH other domain is allowed to call us
-//   credentials -> whether that domain may also be logged in (send the cookie)
-// With CLIENT_URL empty, no CORS headers are sent at all and only our own
-// same-origin client can use the API from a browser.
+// applies these rules to it.
 app.use(cors({
   origin: process.env.CLIENT_URL || 'http://localhost:3000',
   credentials: true
 }));
 
 // Serve the static client (the HTML/CSS/JS in public/).
-// Read the line from the inside out:
-//
-//   process.cwd()  "current working directory" - the folder npm was started
-//                  from, i.e. the project root (.../03-auth-app).
-//                  We use this instead of __dirname (the folder THIS file sits
-//                  in) because that folder moves: it is api/ when we run the
-//                  source with tsx, but dist/api/ after `npm run build`.
-//                  __dirname would then point at dist/public, which does not
-//                  exist. cwd is the project root in both cases.
-//
-//   path.join()    Glues path pieces together with the right separator for the
-//                  operating system (/ on Mac/Linux, \ on Windows) instead of
-//                  us hardcoding "/" in a string. Result: .../03-auth-app/public
-//
-//   express.static() A built-in middleware that takes a folder and turns every
-//                  file inside it into a downloadable URL. The folder name
-//                  itself is NOT part of the URL - it is the new "root":
-//                      public/index.html      -> GET /
-//                      public/protected.html  -> GET /protected.html
-//                      public/js/login.js     -> GET /js/login.js
-//                      public/css/style.css   -> GET /css/style.css
-//                  index.html is special: it is served automatically for "/".
-//                  If no matching file exists, the middleware does nothing and
-//                  passes the request on to the routes below.
-//
-//   app.use()      Registers it for every incoming request (no path given).
-//
-// Why serve the client from the API at all? So both live on the SAME origin
-// (http://localhost:3000). The accessToken cookie is then a first-party cookie
-// that the browser stores and returns without any CORS involvement.
-//
-// On Vercel this line is mostly a local convenience - the platform serves
-// public/ by itself, before a request ever reaches this function.
+// process.cwd() is the project root, path.join() builds the path to public/,
+// and express.static() turns every file in it into a URL
+// (public/index.html -> GET /, public/js/login.js -> GET /js/login.js).
+// On Vercel the platform serves public/ by itself, so this is mostly a local convenience.
 app.use(express.static(path.join(process.cwd(), 'public')));
 
 
@@ -78,24 +42,28 @@ app.use(express.static(path.join(process.cwd(), 'public')));
 import authRouter from '../src/routes/auth'
 import greetingRouter from '../src/routes/greetings'
 import userRouter from '../src/routes/users'
-app.use('/api/users', userRouter)
 import bookRoutes from '../src/routes/bookRoutes'
 import reviewRouter from '../src/routes/reviewRoutes'
 
 app.use('/api/auth', authRouter)
 app.use('/api/greetings', greetingRouter)
+app.use('/api/users', userRouter)
 app.use('/api/books', bookRoutes)
 app.use('/api/reviews', reviewRouter)
 
 
 // Connect To DB
 mongoose.connect(process.env.MONGODB_URL || "")
-  .then(() => console.log("Ansluten till MongoDB"))
-  .catch((err) => console.error("Kunde inte ansluta till MongoDB:", err));
+  .then(() => console.log("Connected to MongoDB"))
+  .catch((err) => console.error("Could not connect to MongoDB:", err));
 
 
-// Start the express server
-const PORT = 3000
-app.listen(PORT, () => {
-  console.log(`Server is running at http://localhost:${PORT}`)
-})
+// Start the server locally only. On Vercel the platform runs the exported app itself.
+if (!process.env.VERCEL) {
+  const PORT = 3000
+  app.listen(PORT, () => {
+    console.log(`Server is running at http://localhost:${PORT}`)
+  })
+}
+
+export default app
